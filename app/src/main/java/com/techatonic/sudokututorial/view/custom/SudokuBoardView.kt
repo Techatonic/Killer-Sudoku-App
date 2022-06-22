@@ -1,10 +1,7 @@
 package com.techatonic.sudokututorial.view.custom
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -48,6 +45,16 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
         color = Color.BLACK
         textSize = 24F
     }
+    private val startingCellTextPaint = Paint().apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = Color.BLACK
+        textSize = 32F
+        typeface = Typeface.DEFAULT_BOLD
+    }
+    private val startingCellPaint = Paint().apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = Color.parseColor("#acacac")
+    }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -64,13 +71,13 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
     }
 
     private fun fillCells(canvas: Canvas){
-        if(selectedRow == -1 || selectedCol == -1){
-            return
-        }
         cells?.forEach{
             val row = it.row
             val col = it.col
-            if(row == selectedRow && col == selectedCol){
+
+            if(it.isStartingCell){
+                fillCell(canvas, row, col, startingCellPaint)
+            } else if(row == selectedRow && col == selectedCol){
                 fillCell(canvas, row, col, selectedCellPaint)
             } else if(row == selectedRow || col == selectedCol){
                 fillCell(canvas, row, col, conflictingCellPaint)
@@ -108,14 +115,16 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
             val col = it.col
             val valueString = it.value.toString()
 
+            val paintToUse = if(it.isStartingCell) startingCellTextPaint else textPaint
+
             val textBounds = Rect()
-            textPaint.getTextBounds(valueString, 0, valueString.length, textBounds)
-            val textWidth = textPaint.measureText(valueString)
+            paintToUse.getTextBounds(valueString, 0, valueString.length, textBounds)
+            val textWidth = paintToUse.measureText(valueString)
             val textHeight = textBounds.height()
 
             canvas.drawText(valueString, col * cellSizePixels + cellSizePixels/2 - textWidth/2,
                                          row * cellSizePixels + cellSizePixels/2 - textHeight/2,
-                           textPaint)
+                           paintToUse)
         }
     }
 
