@@ -5,6 +5,8 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.ContextCompat
+import com.techatonic.sudokututorial.R
 import com.techatonic.sudokututorial.game.Cell
 import kotlin.math.min
 
@@ -26,38 +28,38 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
 
     private val thickLinePaint = Paint().apply {
         style = Paint.Style.STROKE
-        color = Color.BLACK
+        color = ContextCompat.getColor(context, R.color.opposite)
         strokeWidth = 4f
     }
     private val thinLinePaint = Paint().apply {
         style = Paint.Style.STROKE
-        color = Color.BLACK
+        color = ContextCompat.getColor(context, R.color.opposite)
         strokeWidth = 2f
     }
     private val selectedCellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
-        color = Color.parseColor("#6ead3a")
+        color = ContextCompat.getColor(context, R.color.selectedPaint)
     }
     private val conflictingCellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
-        color = Color.parseColor("#efedef")
+        color = ContextCompat.getColor(context, R.color.conflictingPaint)
     }
     private val textPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
-        color = Color.BLACK
+        color = ContextCompat.getColor(context, R.color.opposite)
     }
     private val startingCellTextPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
-        color = Color.BLACK
+        color = ContextCompat.getColor(context, R.color.opposite)
         typeface = Typeface.DEFAULT_BOLD
     }
     private val startingCellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
-        color = Color.parseColor("#acacac")
+        color = ContextCompat.getColor(context, R.color.startingPaint)
     }
     private val noteTextPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
-        color = Color.BLACK
+        color = ContextCompat.getColor(context, R.color.opposite)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -93,7 +95,9 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
                 fillCell(canvas, row, col, selectedCellPaint)
             } else if(row == selectedRow || col == selectedCol){
                 fillCell(canvas, row, col, conflictingCellPaint)
-            } else if(row / sqrtSize == selectedRow /sqrtSize && col / sqrtSize == selectedCol / sqrtSize){
+            } else if(selectedRow != -1 && selectedCol != -1 &&
+                      row / sqrtSize == selectedRow / sqrtSize &&
+                      col / sqrtSize == selectedCol / sqrtSize){
                 fillCell(canvas, row, col, conflictingCellPaint)
             }
         }

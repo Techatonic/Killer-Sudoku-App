@@ -1,6 +1,7 @@
 package com.techatonic.sudokututorial.view.custom
 
 import android.graphics.Color
+import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -36,21 +37,19 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
             }
         }
         notesButton.setOnClickListener{viewModel.sudokuGame.changeNoteTakingState()}
+        deleteButton.setOnClickListener { viewModel.sudokuGame.delete() }
     }
 
     private fun updateNoteTakingUI(isNoteTaking: Boolean?) = isNoteTaking?.let {
-        if(it){
-            notesButton.setBackgroundColor(ContextCompat.getColor(this, com.google.android.material.R.color.design_default_color_primary))
-        } else{
-            notesButton.setBackgroundColor(Color.LTGRAY)
-        }
+        val color = if (it) ContextCompat.getColor(this, R.color.colorPrimary) else Color.LTGRAY
+        notesButton.background.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
     }
     private fun updateHighlightedKeys(set: Set<Int>?) = set?.let {
         // I disagreed with the tutorial on doing this
 
         //numberButtons.forEachIndexed { index, button ->
-            //val color = if(set.contains(index+1)) ContextCompat.getColor(this, com.google.android.material.R.color.design_default_color_primary) else Color.LTGRAY
-        //    button.setBackgroundColor(com.google.android.material.R.color.design_default_color_primary)
+            //val color = if(set.contains(index+1)) ContextCompat.getColor(this, R.color.colorPrimary) else Color.LTGRAY
+        //    button.setBackgroundColor(R.color.colorPrimary)
         //}
     }
 

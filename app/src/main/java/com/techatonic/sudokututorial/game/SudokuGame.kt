@@ -16,8 +16,8 @@ class SudokuGame {
     private val board:Board
 
     init {
-        val cells = List(9 * 9) {i -> Cell(i/9, i % 9, i%9)}
-        cells[0].notes = mutableSetOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+        val cells = List(9 * 9) {i -> Cell(i/9, i % 9, 0)}
+        cells[0].isStartingCell = true
         board = Board(9, cells)
 
         selectedCellLiveData.postValue(Pair(selectedRow, selectedCol))
@@ -64,6 +64,17 @@ class SudokuGame {
 
         val curNotes = if(isTakingNotes) board.getCell(selectedRow, selectedCol).notes else setOf()
         highlightedKeysLiveData.postValue(curNotes)
+    }
+
+    fun delete(){
+        val cell = board.getCell(selectedRow, selectedCol)
+        if(isTakingNotes){
+            cell.notes.clear()
+            highlightedKeysLiveData.postValue(setOf())
+        } else{
+            cell.value = 0
+        }
+        cellsLiveData.postValue(board.cells)
     }
 
 }
