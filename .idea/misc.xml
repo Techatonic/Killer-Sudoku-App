@@ -4,11 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.20953237410071943" />
+        <entry key="..\:/Users/danle/StudioProjects/SudokuTutorial/app/src/main/res/drawable/edit_pen_black.xml" value="0.1735" />
+        <entry key="..\:/Users/danle/StudioProjects/SudokuTutorial/app/src/main/res/layout/activity_play_sudoku.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_play_sudoku.xml" value="0.3582427536231884" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
