@@ -18,5 +18,6 @@
     <color name="selectedPaint">#FF6ead3a</color>
     <color name="conflictingPaint">#BDBDBD</color>
     <color name="startingPaint">#969696</color>
+    <color name="enteredTextPaint">#005A8E</color>
 
 </resources>

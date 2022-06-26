@@ -37,6 +37,7 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         }
         notesButton.setOnClickListener{viewModel.sudokuGame.changeNoteTakingState()}
         deleteButton.setOnClickListener { viewModel.sudokuGame.delete() }
+        playScreen.setOnClickListener { viewModel.sudokuGame.clearSelectedCell() }
     }
 
     private fun updateNoteTakingUI(isNoteTaking: Boolean?) = isNoteTaking?.let {

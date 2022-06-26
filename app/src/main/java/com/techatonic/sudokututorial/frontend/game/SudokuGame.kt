@@ -92,4 +92,10 @@ class SudokuGame {
         cellsLiveData.postValue(board.cells)
     }
 
+    fun clearSelectedCell() {
+        selectedRow = -1
+        selectedCol = -1
+        selectedCellLiveData.postValue(Pair(selectedRow, selectedCol))
+    }
+
 }

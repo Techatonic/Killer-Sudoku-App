@@ -46,16 +46,13 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
     }
     private val textPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
-        color = ContextCompat.getColor(context, R.color.opposite)
+        //color = ContextCompat.getColor(context, R.color.opposite)
+        color = ContextCompat.getColor(context, R.color.enteredTextPaint)
     }
     private val startingCellTextPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
         color = ContextCompat.getColor(context, R.color.opposite)
         typeface = Typeface.DEFAULT_BOLD
-    }
-    private val startingCellPaint = Paint().apply {
-        style = Paint.Style.FILL_AND_STROKE
-        color = ContextCompat.getColor(context, R.color.startingPaint)
     }
     private val noteTextPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
@@ -89,9 +86,7 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
             val row = it.row
             val col = it.col
 
-            if(it.isStartingCell){
-                fillCell(canvas, row, col, startingCellPaint)
-            } else if(row == selectedRow && col == selectedCol){
+            if(row == selectedRow && col == selectedCol){
                 fillCell(canvas, row, col, selectedCellPaint)
             } else if(row == selectedRow || col == selectedCol){
                 fillCell(canvas, row, col, conflictingCellPaint)
