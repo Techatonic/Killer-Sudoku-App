@@ -14,7 +14,7 @@
         android:theme="@style/Theme.SudokuTutorial"
         tools:targetApi="31">
         <activity
-            android:name=".view.custom.PlaySudokuActivity"
+            android:name="com.techatonic.sudokututorial.frontend.custom.PlaySudokuActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

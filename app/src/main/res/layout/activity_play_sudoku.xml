@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.custom.PlaySudokuActivity">
+    tools:context=".frontend.custom.PlaySudokuActivity">
 
-    <com.techatonic.sudokututorial.view.custom.SudokuBoardView
+    <com.techatonic.sudokututorial.frontend.custom.SudokuBoardView
         android:id="@+id/sudokuBoardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

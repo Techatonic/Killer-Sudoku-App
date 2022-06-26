@@ -1,6 +1,7 @@
-package com.techatonic.sudokututorial.game
+package com.techatonic.sudokututorial.frontend.game
 
 import androidx.lifecycle.MutableLiveData
+import com.techatonic.sudokututorial.backend.CreateSudoku
 
 class SudokuGame {
 
@@ -16,7 +17,21 @@ class SudokuGame {
     private val board:Board
 
     init {
-        val cells = List(9 * 9) {i -> Cell(i/9, i % 9, 0)}
+        val sudoku = CreateSudoku.createSudoku()
+
+        val cells = mutableListOf<Cell>()
+
+        for (row in 0..8){
+            for(col in 0..8){
+                if(sudoku.grid[row][col] == 0){
+                    cells.add(Cell(row, col, sudoku.grid[row][col], false))
+                } else{
+                    cells.add(Cell(row, col, sudoku.grid[row][col], true))
+                }
+            }
+        }
+
+            //val cells = List(9 * 9) {i -> Cell(i/9, i % 9, 0)}
         cells[0].isStartingCell = true
         board = Board(9, cells)
 

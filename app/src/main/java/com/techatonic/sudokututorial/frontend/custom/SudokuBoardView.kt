@@ -1,4 +1,4 @@
-package com.techatonic.sudokututorial.view.custom
+package com.techatonic.sudokututorial.frontend.custom
 
 import android.content.Context
 import android.graphics.*
@@ -7,7 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.techatonic.sudokututorial.R
-import com.techatonic.sudokututorial.game.Cell
+import com.techatonic.sudokututorial.frontend.game.Cell
 import kotlin.math.min
 
 class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(context, attributeSet){
@@ -22,7 +22,7 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
     private var selectedRow = -1
     private var selectedCol = -1
 
-    private var listener: SudokuBoardView.OnTouchListener? = null
+    private var listener: OnTouchListener? = null
 
     private var cells: List<Cell>? = null
 
@@ -192,7 +192,7 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
         selectedCol = col
         invalidate()
     }
-    fun registerListener(listener: SudokuBoardView.OnTouchListener){
+    fun registerListener(listener: OnTouchListener){
         this.listener = listener
     }
 
