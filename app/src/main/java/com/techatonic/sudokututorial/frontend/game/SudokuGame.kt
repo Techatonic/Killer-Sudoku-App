@@ -2,6 +2,8 @@ package com.techatonic.sudokututorial.frontend.game
 
 import androidx.lifecycle.MutableLiveData
 import com.techatonic.sudokututorial.backend.CreateSudoku
+import com.techatonic.sudokututorial.backend.Settings
+import com.techatonic.sudokututorial.backend.classic.ClassicSudokuType
 
 class SudokuGame {
 
@@ -15,9 +17,14 @@ class SudokuGame {
     private var isTakingNotes = false
 
     private val board:Board
+    private var sudoku:ClassicSudokuType
 
     init {
-        val sudoku = CreateSudoku.createSudoku()
+        sudoku = when(Settings.selectedSudokuType){
+            ClassicSudokuType.SudokuType.Classic -> CreateSudoku.createClassicSudoku()
+            ClassicSudokuType.SudokuType.Killer -> CreateSudoku.createKillerSudoku()
+            else -> CreateSudoku.createClassicSudoku()
+        }
 
         val cells = mutableListOf<Cell>()
 
@@ -31,8 +38,6 @@ class SudokuGame {
             }
         }
 
-            //val cells = List(9 * 9) {i -> Cell(i/9, i % 9, 0)}
-        cells[0].isStartingCell = true
         board = Board(9, cells)
 
         selectedCellLiveData.postValue(Pair(selectedRow, selectedCol))

@@ -1,12 +1,12 @@
-package com.techatonic.sudokututorial.backend;
+package com.techatonic.sudokututorial.backend.classic;
 
-import android.os.Build;
-import android.util.Pair;
 
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import androidx.core.util.Pair;
 
 public class ClassicSudoku {
 

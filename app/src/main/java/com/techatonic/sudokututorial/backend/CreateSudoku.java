@@ -1,21 +1,17 @@
 package com.techatonic.sudokututorial.backend;
 
-import com.techatonic.sudokututorial.frontend.game.Cell;
-import com.techatonic.sudokututorial.frontend.game.SudokuGame;
-import com.techatonic.sudokututorial.frontend.viewmodel.PlaySudokuViewModel;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import com.techatonic.sudokututorial.backend.classic.ClassicSudoku;
+import com.techatonic.sudokututorial.backend.classic.ClassicSudokuType;
+import com.techatonic.sudokututorial.backend.killer.KillerSudoku;
+import com.techatonic.sudokututorial.backend.killer.KillerSudokuType;
 
 public class CreateSudoku {
 
-    public static ClassicSudokuType createSudoku(){
+    public static ClassicSudokuType createClassicSudoku(){
         return ClassicSudoku.GenerateSudoku(new ClassicSudokuType());
     }
-
+    public static KillerSudokuType createKillerSudoku(){
+        return KillerSudoku.GenerateSudoku(new KillerSudokuType());
+    }
 
 }
