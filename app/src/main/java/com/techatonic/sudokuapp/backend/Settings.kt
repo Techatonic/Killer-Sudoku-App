@@ -1,9 +1,7 @@
-package com.techatonic.sudokuapp.backend;
+package com.techatonic.sudokuapp.backend
 
-import com.techatonic.sudokuapp.backend.sudokutypes.ClassicSudokuType;
+import com.techatonic.sudokuapp.backend.sudokutypes.ClassicSudokuType
 
-public class Settings {
-
-    public static ClassicSudokuType.SudokuType selectedSudokuType = ClassicSudokuType.SudokuType.Killer;
-
+object Settings {
+    var selectedSudokuType = ClassicSudokuType.SudokuType.Killer
 }
