@@ -1,7 +1,10 @@
-package com.techatonic.sudokututorial.frontend.game
+package com.techatonic.sudokuapp.frontend.game
 
 import androidx.lifecycle.MutableLiveData
-import com.techatonic.sudokututorial.backend.CreateSudoku
+import com.techatonic.sudokuapp.backend.RetrieveSudoku
+import com.techatonic.sudokuapp.backend.Settings
+import com.techatonic.sudokuapp.backend.sudokutypes.ClassicSudokuType
+import com.techatonic.sudokuapp.backend.sudokutypes.KillerSudokuType
 
 class SudokuGame {
 
@@ -14,10 +17,19 @@ class SudokuGame {
     private var selectedCol = -1
     private var isTakingNotes = false
 
-    private val board:Board
+    private lateinit var board:Board
 
     init {
-        val sudoku = CreateSudoku.createSudoku()
+
+        when(Settings.selectedSudokuType){
+            ClassicSudokuType.SudokuType.Classic -> RetrieveSudoku.retrieveClassicSudoku(this)
+            ClassicSudokuType.SudokuType.Killer -> RetrieveSudoku.retrieveKillerSudoku(this)
+            else -> RetrieveSudoku.retrieveClassicSudoku(this)
+        }
+    }
+
+    fun classicSudokuGenerated(generatedSudoku: ClassicSudokuType) {
+        val sudoku:ClassicSudokuType = generatedSudoku
 
         val cells = mutableListOf<Cell>()
 
@@ -31,15 +43,36 @@ class SudokuGame {
             }
         }
 
-            //val cells = List(9 * 9) {i -> Cell(i/9, i % 9, 0)}
-        cells[0].isStartingCell = true
         board = Board(9, cells)
 
         selectedCellLiveData.postValue(Pair(selectedRow, selectedCol))
         cellsLiveData.postValue(board.cells)
         isTakingNotesLiveData.postValue(isTakingNotes)
-
     }
+
+
+    fun killerSudokuGenerated(generatedSudoku: KillerSudokuType){
+        val sudoku:KillerSudokuType = generatedSudoku
+
+        val cells = mutableListOf<Cell>()
+
+        for (row in 0..8){
+            for(col in 0..8){
+                if(sudoku.grid[row][col] == 0){
+                    cells.add(Cell(row, col, sudoku.grid[row][col], false))
+                } else{
+                    cells.add(Cell(row, col, sudoku.grid[row][col], true))
+                }
+            }
+        }
+
+        board = Board(9, cells)
+
+        selectedCellLiveData.postValue(Pair(selectedRow, selectedCol))
+        cellsLiveData.postValue(board.cells)
+        isTakingNotesLiveData.postValue(isTakingNotes)
+    }
+
 
     fun handleInput(number: Int){
         if(selectedRow == -1 || selectedCol == -1) return

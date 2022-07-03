@@ -1,4 +1,4 @@
-package com.techatonic.sudokututorial.frontend.custom
+package com.techatonic.sudokuapp.frontend.custom
 
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -7,9 +7,9 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import com.techatonic.sudokututorial.R
-import com.techatonic.sudokututorial.frontend.game.Cell
-import com.techatonic.sudokututorial.frontend.viewmodel.PlaySudokuViewModel
+import com.techatonic.sudokuapp.R
+import com.techatonic.sudokuapp.frontend.game.Cell
+import com.techatonic.sudokuapp.frontend.viewmodel.PlaySudokuViewModel
 import kotlinx.android.synthetic.main.activity_play_sudoku.*
 
 class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener {

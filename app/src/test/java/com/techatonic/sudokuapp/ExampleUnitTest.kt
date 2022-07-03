@@ -1,4 +1,4 @@
-package com.techatonic.sudokututorial
+package com.techatonic.sudokuapp
 
 import org.junit.Test
 
