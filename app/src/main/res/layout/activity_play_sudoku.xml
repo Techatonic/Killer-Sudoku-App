@@ -6,7 +6,7 @@
     tools:context=".frontend.custom.PlaySudokuActivity"
     android:id="@+id/playScreen">
 
-    <com.techatonic.sudokututorial.frontend.custom.SudokuBoardView
+    <com.techatonic.sudokuapp.frontend.custom.SudokuBoardView
         android:id="@+id/sudokuBoardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

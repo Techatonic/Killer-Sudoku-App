@@ -1,14 +1,11 @@
-package com.techatonic.sudokututorial.backend.killer;
+package com.techatonic.sudokuapp.backend.sudokutypes;
 
 import androidx.core.util.Pair;
-
-import com.techatonic.sudokututorial.backend.classic.ClassicSudokuType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class KillerSudokuType extends ClassicSudokuType {
+public class KillerSudokuType extends ClassicSudokuType{
     private ArrayList<Pair<Integer, List<Pair<Integer, Integer>>>> cages = new ArrayList<>();
 
     public KillerSudokuType(SudokuType type, int[][] grid) {
@@ -59,6 +56,10 @@ public class KillerSudokuType extends ClassicSudokuType {
         this.cages = cages;
     }
 
+    public KillerSudokuType(SudokuType sudokuType, int[][] unfilledGrid, int[][] filledGrid) {
+        super(sudokuType, unfilledGrid, filledGrid);
+    }
+
     public ArrayList<Pair<Integer, List<Pair<Integer, Integer>>>> getCages(){
         return cages;
     }
@@ -99,6 +100,13 @@ public class KillerSudokuType extends ClassicSudokuType {
             }
         }
         return result;
+    }
+
+    public void setCages(ArrayList<Pair<Integer, List<Pair<Integer, Integer>>>> cages){
+        this.cages = cages;
+    }
+    public void addCage(Pair<Integer, List<Pair<Integer, Integer>>> cage){
+        this.cages.add(cage);
     }
 
     public void PrintSudoku() {

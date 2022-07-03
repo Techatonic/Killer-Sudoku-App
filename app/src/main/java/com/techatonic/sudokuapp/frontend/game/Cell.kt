@@ -1,4 +1,4 @@
-package com.techatonic.sudokututorial.frontend.game
+package com.techatonic.sudokuapp.frontend.game
 
 class Cell(
     val row: Int,

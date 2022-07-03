@@ -1,4 +1,4 @@
-package com.techatonic.sudokututorial.frontend.game
+package com.techatonic.sudokuapp.frontend.game
 
 class Board(val size:Int, val cells: List<Cell>) {
 

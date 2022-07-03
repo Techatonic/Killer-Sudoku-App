@@ -1,4 +1,4 @@
-package com.techatonic.sudokututorial.frontend.custom
+package com.techatonic.sudokuapp.frontend.custom
 
 import android.content.Context
 import android.graphics.*
@@ -6,8 +6,8 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
-import com.techatonic.sudokututorial.R
-import com.techatonic.sudokututorial.frontend.game.Cell
+import com.techatonic.sudokuapp.R
+import com.techatonic.sudokuapp.frontend.game.Cell
 import kotlin.math.min
 
 class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(context, attributeSet){

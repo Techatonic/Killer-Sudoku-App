@@ -1,4 +1,4 @@
-package com.techatonic.sudokututorial.backend.classic;
+package com.techatonic.sudokuapp.backend.sudokutypes;
 
 public class ClassicSudokuType {
 

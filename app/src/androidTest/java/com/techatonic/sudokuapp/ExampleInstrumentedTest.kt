@@ -1,4 +1,4 @@
-package com.techatonic.sudokututorial
+package com.techatonic.sudokuapp
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
