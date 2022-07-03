@@ -1,108 +1,98 @@
-package com.techatonic.sudokuapp.backend.sudokutypes;
+package com.techatonic.sudokuapp.backend.sudokutypes
 
-public class ClassicSudokuType {
+import com.techatonic.sudokuapp.backend.sudokutypes.ClassicSudokuType
 
-
-    public enum SudokuType{
-        Classic,
-        Arrow,
-        Thermo,
-        Killer
+open class ClassicSudokuType {
+    enum class SudokuType {
+        Classic, Arrow, Thermo, Killer
     }
 
+    var type: SudokuType
+        private set
+    var grid: Array<IntArray>
+        private set
+    lateinit var filledGrid: Array<IntArray>
 
-    private SudokuType type;
-    private int[][] grid;
-    private int[][] filledGrid;
-
-    public ClassicSudokuType(){
-        this.type = SudokuType.Classic;
-        this.grid = new int[9][9];
-    }
-    public ClassicSudokuType(SudokuType type, int[][] grid){
-        this.type = type;
-        this.grid = grid;
-    }
-    public ClassicSudokuType(int[][] grid) {
-        this.type = SudokuType.Classic;
-        this.grid = grid;
-    }
-    public ClassicSudokuType(SudokuType type){
-        this.type = type;
-        this.grid = new int[9][9];
-    }
-    public ClassicSudokuType(ClassicSudokuType sudoku){
-        this.type = sudoku.type;
-        this.grid = sudoku.grid;
-        this.filledGrid = sudoku.filledGrid;
-    }
-    public ClassicSudokuType(ClassicSudokuType.SudokuType type, int[][] unfilledGrid, int[][] filledGrid) {
-        this.type = type;
-        this.grid = unfilledGrid;
-        this.filledGrid = filledGrid;
+    constructor() {
+        type = SudokuType.Classic
+        grid = Array(9) { IntArray(9) }
     }
 
-
-    public SudokuType getType() {
-        return type;
+    constructor(type: SudokuType, grid: Array<IntArray>) {
+        this.type = type
+        this.grid = grid
     }
 
-    public int[][] getGrid() {
-        return grid;
-    }
-    public int[][] getFilledGrid(){
-        return filledGrid;
+    constructor(grid: Array<IntArray>) {
+        type = SudokuType.Classic
+        this.grid = grid
     }
 
-    public void setPosition(int row, int col, int val){
-        grid[row][col] = val;
+    constructor(type: SudokuType) {
+        this.type = type
+        grid = Array(9) { IntArray(9) }
     }
 
-    public void setFilledGrid(int[][] filledGrid) { this.filledGrid = filledGrid; }
-
-    public void PrintSudoku() {
-        PrintSudoku(this.grid);
+    constructor(sudoku: ClassicSudokuType) {
+        type = sudoku.type
+        grid = sudoku.grid
+        filledGrid = sudoku.filledGrid
     }
 
-    public void PrintSudoku(int[][] grid){
-        for(int row=0; row < 9; row++){
-            if(row % 3 == 0){
-                System.out.println(new String(new char[22]).replace("\0", "-"));
+    constructor(type: SudokuType, unfilledGrid: Array<IntArray>, filledGrid: Array<IntArray>) {
+        this.type = type
+        grid = unfilledGrid
+        this.filledGrid = filledGrid
+    }
+
+    fun setPosition(row: Int, col: Int, `val`: Int) {
+        grid[row][col] = `val`
+    }
+
+    open fun PrintSudoku() {
+        PrintSudoku(grid)
+    }
+
+    fun PrintSudoku(grid: Array<IntArray>) {
+        for (row in 0..8) {
+            if (row % 3 == 0) {
+                println(String(CharArray(22)).replace("\u0000", "-"))
             }
-            for(int col=0; col < 9; col++){
-                if(col % 3 == 0){
-                    System.out.print("|");
+            for (col in 0..8) {
+                if (col % 3 == 0) {
+                    print("|")
                 }
-                if(grid[row][col] == 0){
-                    System.out.print("  ");
-                } else{
-                    System.out.print(" " + grid[row][col]);
+                if (grid[row][col] == 0) {
+                    print("  ")
+                } else {
+                    print(" " + grid[row][col])
                 }
-                if(col == 8){
-                    System.out.print("|\n");
+                if (col == 8) {
+                    print("|\n")
                 }
             }
         }
-        System.out.println(new String(new char[22]).replace("\0", "-"));
+        println(String(CharArray(22)).replace("\u0000", "-"))
         //System.out.println("\n");
     }
 
-    public void PrintSudokuStats(){
-        PrintSudokuStats(this.grid);
+    open fun PrintSudokuStats() {
+        PrintSudokuStats(grid)
     }
-    public void PrintSudokuStats(int[][] grid){
-        System.out.println("Number of cells given: " + GetCellsGiven());
-    }
-    public int GetCellsGiven(){
-        int cellsGiven = 0;
 
-        for(int[] row : grid){
-            for(int cell : row){
-                if(cell != 0){
-                    cellsGiven++;
+    fun PrintSudokuStats(grid: Array<IntArray>?) {
+        println("Number of cells given: " + GetCellsGiven())
+    }
+
+    private fun GetCellsGiven(): Int {
+        var cellsGiven = 0
+        for (row in grid) {
+            for (cell in row) {
+                if (cell != 0) {
+                    cellsGiven++
                 }
             }
         }
-        return cellsGiven;
+        return cellsGiven
     }
 }

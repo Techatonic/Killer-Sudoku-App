@@ -6,7 +6,9 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.view.ContentInfoCompat
 import com.techatonic.sudokuapp.R
+import com.techatonic.sudokuapp.backend.sudokutypes.ClassicSudokuType
 import com.techatonic.sudokuapp.frontend.game.Cell
 import kotlin.math.min
 
@@ -14,6 +16,8 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
 
     private var sqrtSize = 3
     private var size = 9
+
+    private var sudokuType : ClassicSudokuType.SudokuType? = null
 
     // set in onDraw when we get a size of the view
     private var cellSizePixels = 0F
@@ -58,6 +62,18 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
         style = Paint.Style.FILL_AND_STROKE
         color = ContextCompat.getColor(context, R.color.opposite)
     }
+    private val cageTextPaint = Paint().apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = ContextCompat.getColor(context, R.color.opposite)
+        typeface = Typeface.DEFAULT_BOLD
+    }
+
+    // BEGIN Killer Sudokus
+    var cages : List<Pair<Int, List<Pair<Int, Int>>>>? = null
+    var cageOffset : Float = 0F // Set in onDraw
+    // END Killer Sudokus
+
+
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -71,14 +87,20 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
         fillCells(canvas)
         drawLines(canvas)
         drawText(canvas)
+        if(sudokuType == ClassicSudokuType.SudokuType.Killer){
+            drawCages(canvas)
+        }
     }
 
     private fun updateMeasurements(width: Int){
         cellSizePixels = (width/size).toFloat()
-        noteSizePixels = cellSizePixels / sqrtSize.toFloat()
-        noteTextPaint.textSize = cellSizePixels / sqrtSize.toFloat()
+        noteSizePixels = cellSizePixels / sqrtSize.toFloat() / 1.5F
+        noteTextPaint.textSize = cellSizePixels / sqrtSize.toFloat() / 1.5F
         textPaint.textSize = cellSizePixels / 1.5F
         startingCellTextPaint.textSize = cellSizePixels / 1.5F
+        cageTextPaint.textSize = cellSizePixels / sqrtSize.toFloat() / 1.25F
+
+        cageOffset = cellSizePixels / 10f
     }
 
     private fun fillCells(canvas: Canvas){
@@ -132,12 +154,12 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
                     val colInCell = (note-1) % sqrtSize
                     val valueString = note.toString()
                     noteTextPaint.getTextBounds(valueString, 0, valueString.length, textBounds)
-                    val textWidth = noteTextPaint.measureText(valueString)
+                    val textWidth = noteTextPaint.measureText(valueString) / 1.25F
                     val textHeight = textBounds.height()
 
                     canvas.drawText(
-                        valueString, (cell.col * cellSizePixels) + (colInCell * noteSizePixels) + noteSizePixels / 2 - textWidth / 2f,
-                                     (cell.row * cellSizePixels) + (rowInCell * noteSizePixels) + noteSizePixels / 2 + textHeight / 2f,
+                        valueString, (cell.col * cellSizePixels) + (colInCell * noteSizePixels) + noteSizePixels - textWidth/2f,
+                                     (cell.row * cellSizePixels) + (rowInCell * noteSizePixels) + noteSizePixels*3/2f + textHeight/2f,
                         noteTextPaint
                     )
                 }
@@ -157,6 +179,78 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
                                  row * cellSizePixels + cellSizePixels / 2 + textHeight / 2,
                     paintToUse
                 )
+            }
+        }
+    }
+
+    private fun drawCages(canvas: Canvas) {
+        this.cages?.forEach { cage ->
+
+            val cells = cage.second.sortedWith(compareBy({it.first}, {it.second}))
+            //val cells = cage.second
+            for((index, cell) in cells.withIndex()){
+                val textBounds = Rect()
+                if(index == 0){
+                    val valueString = cage.first.toString()
+                    cageTextPaint.getTextBounds(valueString, 0, valueString.length, textBounds)
+                    val textWidth = noteTextPaint.measureText(valueString) / 1.25F
+                    val textHeight = textBounds.height()
+
+                    canvas.drawText(
+                        valueString, (cell.second * cellSizePixels) + noteSizePixels / 2 - textWidth*1/4f,
+                                     (cell.first * cellSizePixels) + noteSizePixels / 2 + textHeight*5/8f,
+                        cageTextPaint
+                    )
+                }
+
+                // Right line
+                if(!cells.any { it.first == cell.first && it.second == cell.second+1 }){
+                    canvas.drawLine(
+                        (cell.second+1) * cellSizePixels - cageOffset,
+                        cell.first * cellSizePixels + cageOffset,
+                        (cell.second+1) * cellSizePixels - cageOffset,
+                        (cell.first+1) * cellSizePixels - cageOffset,
+                        thinLinePaint
+                    )
+                }
+                // Bottom line
+                if(!cells.any { it.first == cell.first+1 && it.second == cell.second }){
+                    canvas.drawLine(
+                        cell.second * cellSizePixels + cageOffset,
+                        (cell.first+1) * cellSizePixels - cageOffset,
+                        (cell.second+1) * cellSizePixels - cageOffset,
+                        (cell.first+1) * cellSizePixels - cageOffset,
+                        thinLinePaint
+                    )
+                }
+                // Top line
+                if(!cells.any { it.first == cell.first-1 && it.second == cell.second }){
+                    val startX = when (index) {
+                        0 -> cell.second * cellSizePixels + noteSizePixels / 2 + textBounds.width()
+                        else -> cell.second * cellSizePixels + cageOffset
+                    }
+                    canvas.drawLine(
+                        startX,
+                        cell.first * cellSizePixels + cageOffset,
+                        (cell.second+1) * cellSizePixels - cageOffset,
+                        cell.first * cellSizePixels + cageOffset,
+                        thinLinePaint
+                    )
+                }
+                // Left line
+                if(!cells.any { it.first == cell.first && it.second == cell.second-1 }){
+                    val startY = when (index) {
+                        0 -> cell.first * cellSizePixels + noteSizePixels / 2 + textBounds.height()
+                        else -> cell.first * cellSizePixels + cageOffset
+                    }
+                    canvas.drawLine(
+                        cell.second * cellSizePixels + cageOffset,
+                        startY,
+                        cell.second * cellSizePixels + cageOffset,
+                        (cell.first+1) * cellSizePixels - cageOffset,
+                        thinLinePaint
+                    )
+                }
             }
         }
     }
@@ -187,8 +281,18 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
         selectedCol = col
         invalidate()
     }
+
+    fun updateSudokuType(sudokuType: ClassicSudokuType.SudokuType){
+        this.sudokuType = sudokuType
+        println(this.sudokuType)
+    }
+
     fun registerListener(listener: OnTouchListener){
         this.listener = listener
+    }
+
+    fun setKillerCages(cages: List<Pair<Int, List<Pair<Int, Int>>>>?) {
+        this.cages = cages
     }
 
     interface OnTouchListener {

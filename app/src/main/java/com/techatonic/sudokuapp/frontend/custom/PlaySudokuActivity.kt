@@ -8,6 +8,7 @@ import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.techatonic.sudokuapp.R
+import com.techatonic.sudokuapp.backend.sudokutypes.ClassicSudokuType
 import com.techatonic.sudokuapp.frontend.game.Cell
 import com.techatonic.sudokuapp.frontend.viewmodel.PlaySudokuViewModel
 import kotlinx.android.synthetic.main.activity_play_sudoku.*
@@ -28,6 +29,8 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         viewModel.sudokuGame.cellsLiveData.observe(this) { updateCells(it) }
         viewModel.sudokuGame.isTakingNotesLiveData.observe(this) {updateNoteTakingUI(it)}
         viewModel.sudokuGame.highlightedKeysLiveData.observe(this) {updateHighlightedKeys(it)}
+        viewModel.sudokuGame.sudokuTypeLiveData.observe(this) {updateSudokuType(it)}
+        viewModel.sudokuGame.killerCagesLiveData.observe(this) {setKillerCages(it)}
 
         numberButtons = listOf(oneButton, twoButton, threeButton, fourButton, fiveButton, sixButton, sevenButton, eightButton, nineButton)
         numberButtons.forEachIndexed{ index, button ->
@@ -59,6 +62,14 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
 
     private fun updateSelectedCellUI(cell: Pair<Int, Int>?) = cell?.let {
         sudokuBoardView.updateSelectedCellUI(cell.first, cell.second)
+    }
+
+    private fun updateSudokuType(sudokuType: ClassicSudokuType.SudokuType?) = sudokuType?.let {
+        sudokuBoardView.updateSudokuType(sudokuType)
+    }
+
+    private fun setKillerCages(cages: List<Pair<Int, List<Pair<Int, Int>>>>?) {
+        sudokuBoardView.setKillerCages(cages)
     }
 
     override fun onCellTouched(row: Int, col: Int) {

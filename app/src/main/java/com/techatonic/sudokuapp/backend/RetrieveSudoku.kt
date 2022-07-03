@@ -8,7 +8,6 @@ import com.techatonic.sudokuapp.frontend.game.SudokuGame
 
 object RetrieveSudoku {
     fun retrieveClassicSudoku(sudokuGame: SudokuGame) {
-        //sudokuGame.classicSudokuGenerated(ClassicSudokuType())
         GetClassicSudokuFromDatabase().retrieveClassicSudoku(sudokuGame)
     }
 

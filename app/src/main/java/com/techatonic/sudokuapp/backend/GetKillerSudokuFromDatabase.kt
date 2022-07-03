@@ -5,13 +5,14 @@ import kotlin.Throws
 import com.google.firebase.firestore.FirebaseFirestore
 import android.content.ContentValues
 import android.util.Log
-import androidx.core.util.Pair
 import com.google.android.gms.tasks.OnCompleteListener
 import com.techatonic.sudokuapp.backend.sudokutypes.ClassicSudokuType
 import com.google.firebase.firestore.CollectionReference
 import com.techatonic.sudokuapp.backend.GetKillerSudokuFromDatabase.SudokuType.Killer
 import com.techatonic.sudokuapp.frontend.game.SudokuGame
 import java.util.*
+import kotlin.Pair
+import kotlin.collections.HashMap
 
 class GetKillerSudokuFromDatabase {
     enum class SudokuType {
@@ -19,10 +20,10 @@ class GetKillerSudokuFromDatabase {
     }
 
     private var collectionNameBySudokuType: Map<SudokuType, String> = mapOf(
-        kotlin.Pair(SudokuType.Classic, "classicsudokus"),
-        kotlin.Pair(SudokuType.Arrow, "arrowsudokus"),
-        kotlin.Pair(SudokuType.Thermo, "thermosudokus"),
-        kotlin.Pair(Killer, "killersudokus")
+        Pair(SudokuType.Classic, "classicsudokus"),
+        Pair(SudokuType.Arrow, "arrowsudokus"),
+        Pair(SudokuType.Thermo, "thermosudokus"),
+        Pair(Killer, "killersudokus")
     )
     private var documentCount = 0
     private var sudoku: KillerSudokuType
@@ -167,14 +168,17 @@ class GetKillerSudokuFromDatabase {
         cageDocument.get().addOnCompleteListener(OnCompleteListener { task ->
             if (task.isSuccessful) {
                 val cageSum: Int
-                val cells: List<Pair<Int, Int>>?
+                val cells: MutableList<Pair<Int, Int>> = mutableListOf()
                 val document = task.result
                 if (document == null) {
                     println("Failure")
                     return@OnCompleteListener
                 }
                 cageSum = (Objects.requireNonNull(document["sum"]) as Long).toInt()
-                cells = document["cells"] as ArrayList<Pair<Int, Int>>?
+                val cellsResult = document["cells"] as List<HashMap<String, Int>>
+                cellsResult.forEach { cell ->
+                    cells.add(Pair(cell["first"]!!, cell["second"]!!))
+                }
                 sudoku.addCage(Pair(cageSum, cells))
                 if (finishedSections == 3 + cageNum) {
                     finishedSections++

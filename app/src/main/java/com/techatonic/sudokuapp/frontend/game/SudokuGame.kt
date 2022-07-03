@@ -12,6 +12,9 @@ class SudokuGame {
     var cellsLiveData = MutableLiveData<List<Cell>>()
     val isTakingNotesLiveData = MutableLiveData<Boolean>()
     val highlightedKeysLiveData = MutableLiveData<Set<Int>>()
+    val sudokuTypeLiveData = MutableLiveData<ClassicSudokuType.SudokuType>()
+    // Killer
+    val killerCagesLiveData = MutableLiveData<List<Pair<Int, List<Pair<Int, Int>>>>>()
 
     private var selectedRow = -1
     private var selectedCol = -1
@@ -48,6 +51,7 @@ class SudokuGame {
         selectedCellLiveData.postValue(Pair(selectedRow, selectedCol))
         cellsLiveData.postValue(board.cells)
         isTakingNotesLiveData.postValue(isTakingNotes)
+        sudokuTypeLiveData.postValue(ClassicSudokuType.SudokuType.Classic)
     }
 
 
@@ -71,10 +75,16 @@ class SudokuGame {
         selectedCellLiveData.postValue(Pair(selectedRow, selectedCol))
         cellsLiveData.postValue(board.cells)
         isTakingNotesLiveData.postValue(isTakingNotes)
+        sudokuTypeLiveData.postValue(ClassicSudokuType.SudokuType.Killer)
+        killerCagesLiveData.postValue(sudoku.cages)
     }
 
 
     fun handleInput(number: Int){
+        if (!this::board.isInitialized){
+            return
+        }
+
         if(selectedRow == -1 || selectedCol == -1) return
         val cell = board.getCell(selectedRow, selectedCol)
         if(cell.isStartingCell) return
@@ -93,6 +103,10 @@ class SudokuGame {
     }
 
     fun updateSelectedCell(row:Int, col:Int){
+        if (!this::board.isInitialized){
+            return
+        }
+
         val cell = board.getCell(row, col)
         if(cell.isStartingCell){
             return
@@ -115,6 +129,10 @@ class SudokuGame {
     }
 
     fun delete(){
+        if (!this::board.isInitialized){
+            return
+        }
+
         val cell = board.getCell(selectedRow, selectedCol)
         if(isTakingNotes){
             cell.notes.clear()
