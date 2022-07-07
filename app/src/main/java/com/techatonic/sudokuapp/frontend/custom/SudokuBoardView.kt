@@ -205,20 +205,37 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
 
                 // Right line
                 if(!cells.any { it.first == cell.first && it.second == cell.second+1 }){
+                    val startY = when(cells.any { it.first == cell.first-1 && it.second == cell.second }){
+                        true -> cell.first * cellSizePixels
+                        false -> cell.first * cellSizePixels + cageOffset
+                    }
+                    val stopY = when(cells.any { it.first == cell.first+1 && it.second == cell.second}){
+                        true ->(cell.first+1) * cellSizePixels
+                        false -> (cell.first+1) * cellSizePixels - cageOffset
+                    }
+
                     canvas.drawLine(
                         (cell.second+1) * cellSizePixels - cageOffset,
-                        cell.first * cellSizePixels + cageOffset,
+                        startY,
                         (cell.second+1) * cellSizePixels - cageOffset,
-                        (cell.first+1) * cellSizePixels - cageOffset,
+                        stopY,
                         thinLinePaint
                     )
                 }
                 // Bottom line
                 if(!cells.any { it.first == cell.first+1 && it.second == cell.second }){
+                    val startX = when(cells.any { it.first == cell.first && it.second == cell.second-1 }){
+                        true -> cell.second * cellSizePixels
+                        false -> cell.second * cellSizePixels + cageOffset
+                    }
+                    val stopX = when(cells.any { it.first == cell.first && it.second == cell.second+1}){
+                        true ->(cell.second+1) * cellSizePixels
+                        false -> (cell.second+1) * cellSizePixels - cageOffset
+                    }
                     canvas.drawLine(
-                        cell.second * cellSizePixels + cageOffset,
+                        startX,
                         (cell.first+1) * cellSizePixels - cageOffset,
-                        (cell.second+1) * cellSizePixels - cageOffset,
+                        stopX,
                         (cell.first+1) * cellSizePixels - cageOffset,
                         thinLinePaint
                     )
@@ -227,12 +244,19 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
                 if(!cells.any { it.first == cell.first-1 && it.second == cell.second }){
                     val startX = when (index) {
                         0 -> cell.second * cellSizePixels + noteSizePixels / 2 + textBounds.width()
-                        else -> cell.second * cellSizePixels + cageOffset
+                        else -> when(cells.any { it.first == cell.first && it.second == cell.second-1}){
+                            true -> cell.second * cellSizePixels
+                            false -> cell.second * cellSizePixels + cageOffset
+                        }
+                    }
+                    val stopX = when(cells.any { it.first == cell.first && it.second == cell.second+1}){
+                        true -> (cell.second+1) * cellSizePixels
+                        false -> (cell.second+1) * cellSizePixels - cageOffset
                     }
                     canvas.drawLine(
                         startX,
                         cell.first * cellSizePixels + cageOffset,
-                        (cell.second+1) * cellSizePixels - cageOffset,
+                        stopX,
                         cell.first * cellSizePixels + cageOffset,
                         thinLinePaint
                     )
@@ -241,16 +265,113 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
                 if(!cells.any { it.first == cell.first && it.second == cell.second-1 }){
                     val startY = when (index) {
                         0 -> cell.first * cellSizePixels + noteSizePixels / 2 + textBounds.height()
-                        else -> cell.first * cellSizePixels + cageOffset
+                        else -> when(cells.any { it.first == cell.first-1 && it.second == cell.second }){
+                            true -> cell.first * cellSizePixels
+                            false -> cell.first * cellSizePixels + cageOffset
+                        }
+                    }
+                    val stopY = when(cells.any { it.first == cell.first+1 && it.second == cell.second}){
+                        true ->(cell.first+1) * cellSizePixels
+                        false -> (cell.first+1) * cellSizePixels - cageOffset
                     }
                     canvas.drawLine(
                         cell.second * cellSizePixels + cageOffset,
                         startY,
                         cell.second * cellSizePixels + cageOffset,
-                        (cell.first+1) * cellSizePixels - cageOffset,
+                        stopY,
                         thinLinePaint
                     )
                 }
+
+                // CORNERS
+                // Top-right corner
+                if( cells.any { it.first == cell.first-1 && it.second == cell.second } &&
+                    cells.any { it.first == cell.first && it.second == cell.second+1 } &&
+                    !cells.any { it.first == cell.first-1 && it.second == cell.second+1 }){
+                    // Top line
+                    canvas.drawLine(
+                        (cell.second+1) * cellSizePixels - cageOffset,
+                        cell.first * cellSizePixels + cageOffset,
+                        (cell.second+1) * cellSizePixels,
+                        cell.first * cellSizePixels + cageOffset,
+                        thinLinePaint
+                    )
+                    // Right line
+                    canvas.drawLine(
+                        (cell.second+1) * cellSizePixels - cageOffset,
+                        cell.first * cellSizePixels,
+                        (cell.second+1) * cellSizePixels - cageOffset,
+                        cell.first * cellSizePixels + cageOffset,
+                        thinLinePaint
+                    )
+                }
+
+                // Bottom-right corner
+                if( cells.any { it.first == cell.first+1 && it.second == cell.second } &&
+                    cells.any { it.first == cell.first && it.second == cell.second+1 } &&
+                    !cells.any { it.first == cell.first+1 && it.second == cell.second+1 }){
+                    // Bottom line
+                    canvas.drawLine(
+                        (cell.second+1) * cellSizePixels - cageOffset,
+                        (cell.first+1) * cellSizePixels - cageOffset,
+                        (cell.second+1) * cellSizePixels,
+                        (cell.first+1) * cellSizePixels - cageOffset,
+                        thinLinePaint
+                    )
+                    // Right line
+                    canvas.drawLine(
+                        (cell.second+1) * cellSizePixels - cageOffset,
+                        (cell.first+1) * cellSizePixels - cageOffset,
+                        (cell.second+1) * cellSizePixels - cageOffset,
+                        (cell.first+1) * cellSizePixels,
+                        thinLinePaint
+                    )
+                }
+
+                // Bottom-left corner
+                if( cells.any { it.first == cell.first+1 && it.second == cell.second } &&
+                    cells.any { it.first == cell.first && it.second == cell.second-1 } &&
+                    !cells.any { it.first == cell.first+1 && it.second == cell.second-1 }){
+                    // Bottom line
+                    canvas.drawLine(
+                        cell.second * cellSizePixels,
+                        (cell.first+1) * cellSizePixels - cageOffset,
+                        cell.second * cellSizePixels + cageOffset,
+                        (cell.first+1) * cellSizePixels - cageOffset,
+                        thinLinePaint
+                    )
+                    // Left line
+                    canvas.drawLine(
+                        cell.second * cellSizePixels + cageOffset,
+                        (cell.first+1) * cellSizePixels - cageOffset,
+                        cell.second * cellSizePixels + cageOffset,
+                        (cell.first+1) * cellSizePixels,
+                        thinLinePaint
+                    )
+                }
+
+                // Top-left corner
+                if( cells.any { it.first == cell.first-1 && it.second == cell.second } &&
+                    cells.any { it.first == cell.first && it.second == cell.second-1 } &&
+                    !cells.any { it.first == cell.first-1 && it.second == cell.second-1 }){
+                    // Top line
+                    canvas.drawLine(
+                        cell.second * cellSizePixels,
+                        cell.first * cellSizePixels + cageOffset,
+                        cell.second * cellSizePixels + cageOffset,
+                        cell.first * cellSizePixels + cageOffset,
+                        thinLinePaint
+                    )
+                    // Left line
+                    canvas.drawLine(
+                        cell.second * cellSizePixels + cageOffset,
+                        cell.first * cellSizePixels,
+                        cell.second * cellSizePixels + cageOffset,
+                        cell.first * cellSizePixels + cageOffset,
+                        thinLinePaint
+                    )
+                }
+
             }
         }
     }
