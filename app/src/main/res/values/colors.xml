@@ -15,9 +15,9 @@
     <color name="colorAccent">#793aad</color>
 
     <color name="opposite">#ff000000</color>
-    <color name="selectedPaint">#FF6ead3a</color>
+    <color name="selectedPaint">#50B3FF</color>
     <color name="conflictingPaint">#BDBDBD</color>
     <color name="startingPaint">#969696</color>
-    <color name="enteredTextPaint">#005A8E</color>
+    <color name="enteredTextPaint">#003350</color>
 
 </resources>

@@ -9,12 +9,24 @@
     <color name="white">#FFFFFFFF</color>
 
 
+    <!--
     <color name="colorPrimary">#6ead3a</color>
     <color name="colorPrimaryDark">#236416</color>
     <color name="colorAccent">#793aad</color>
 
     <color name="opposite">#FFFFFFFF</color>
     <color name="selectedPaint">#FF6ead3a</color>
+    <color name="conflictingPaint">#424242</color>
+    <color name="startingPaint">#969696</color>
+    <color name="enteredTextPaint">#005A8E</color>
+    -->
+
+    <color name="colorPrimary">#6ead3a</color>
+    <color name="colorPrimaryDark">#236416</color>
+    <color name="colorAccent">#793aad</color>
+
+    <color name="opposite">#ffffffff</color>
+    <color name="selectedPaint">#50B3FF</color>
     <color name="conflictingPaint">#424242</color>
     <color name="startingPaint">#969696</color>
     <color name="enteredTextPaint">#005A8E</color>
