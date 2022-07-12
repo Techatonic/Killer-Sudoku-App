@@ -44,7 +44,7 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
     }
 
     private fun updateNoteTakingUI(isNoteTaking: Boolean?) = isNoteTaking?.let {
-        val color = if (it) ContextCompat.getColor(this, R.color.colorPrimary) else Color.LTGRAY
+        val color = if (it) ContextCompat.getColor(this, R.color.colorAccent) else Color.LTGRAY
         notesButton.background.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
     }
     private fun updateHighlightedKeys(set: Set<Int>?) = set?.let {
