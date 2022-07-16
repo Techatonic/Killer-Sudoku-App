@@ -133,6 +133,9 @@ class SudokuGame(val playSudokuActivity: PlaySudokuActivity) {
     fun changeNoteTakingState(){
         isTakingNotes = !isTakingNotes
         isTakingNotesLiveData.postValue(isTakingNotes)
+        if(selectedRow == -1 || selectedCol == -1){
+            return
+        }
 
         val curNotes = if(isTakingNotes) board.getCell(selectedRow, selectedCol).notes else setOf()
         highlightedKeysLiveData.postValue(curNotes)
