@@ -4,11 +4,11 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import com.techatonic.sudokuapp.R
 import com.techatonic.sudokuapp.backend.sudokutypes.ClassicSudokuType
 import com.techatonic.sudokuapp.frontend.game.Cell
@@ -29,23 +29,38 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         progressBar = findViewById(R.id.progressBar)
         progressBar.visibility = View.VISIBLE
 
+        // Set back button in app bar
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //
+
         sudokuBoardView.registerListener(this)
 
-        viewModel = PlaySudokuViewModel(this) //ViewModelProvider(this)//[PlaySudokuViewModel::class.java]
+        viewModel =
+            PlaySudokuViewModel(this) //ViewModelProvider(this)//[PlaySudokuViewModel::class.java]
         viewModel.sudokuGame.selectedCellLiveData.observe(this) { updateSelectedCellUI(it) }
         viewModel.sudokuGame.cellsLiveData.observe(this) { updateCells(it) }
-        viewModel.sudokuGame.isTakingNotesLiveData.observe(this) {updateNoteTakingUI(it)}
-        viewModel.sudokuGame.highlightedKeysLiveData.observe(this) {updateHighlightedKeys(it)}
-        viewModel.sudokuGame.sudokuTypeLiveData.observe(this) {updateSudokuType(it)}
-        viewModel.sudokuGame.killerCagesLiveData.observe(this) {setKillerCages(it)}
+        viewModel.sudokuGame.isTakingNotesLiveData.observe(this) { updateNoteTakingUI(it) }
+        viewModel.sudokuGame.highlightedKeysLiveData.observe(this) { updateHighlightedKeys(it) }
+        viewModel.sudokuGame.sudokuTypeLiveData.observe(this) { updateSudokuType(it) }
+        viewModel.sudokuGame.killerCagesLiveData.observe(this) { setKillerCages(it) }
 
-        numberButtons = listOf(oneButton, twoButton, threeButton, fourButton, fiveButton, sixButton, sevenButton, eightButton, nineButton)
-        numberButtons.forEachIndexed{ index, button ->
+        numberButtons = listOf(
+            oneButton,
+            twoButton,
+            threeButton,
+            fourButton,
+            fiveButton,
+            sixButton,
+            sevenButton,
+            eightButton,
+            nineButton
+        )
+        numberButtons.forEachIndexed { index, button ->
             button.setOnClickListener {
-                viewModel.sudokuGame.handleInput(index+1)
+                viewModel.sudokuGame.handleInput(index + 1)
             }
         }
-        notesButton.setOnClickListener{viewModel.sudokuGame.changeNoteTakingState()}
+        notesButton.setOnClickListener { viewModel.sudokuGame.changeNoteTakingState() }
         deleteButton.setOnClickListener { viewModel.sudokuGame.delete() }
         playScreen.setOnClickListener { viewModel.sudokuGame.clearSelectedCell() }
     }
@@ -81,6 +96,19 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
 
     override fun onCellTouched(row: Int, col: Int) {
         viewModel.sudokuGame.updateSelectedCell(row, col)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        println("Button pressed")
+        when (item.itemId) {
+            android.R.id.home -> {
+                println("Howdy partner")
+                finish()
+                return true
+            }
+            else -> println(item.itemId)
+        }
+        return super.onContextItemSelected(item)
     }
 
 }
