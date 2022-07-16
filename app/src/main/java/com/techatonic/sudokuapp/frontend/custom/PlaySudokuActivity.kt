@@ -4,7 +4,9 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.techatonic.sudokuapp.R
@@ -18,13 +20,18 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
     private lateinit var viewModel: PlaySudokuViewModel
     private lateinit var numberButtons: List<Button>
 
+    lateinit var progressBar: ProgressBar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play_sudoku)
 
+        progressBar = findViewById(R.id.progressBar)
+        progressBar.visibility = View.VISIBLE
+
         sudokuBoardView.registerListener(this)
 
-        viewModel = ViewModelProvider(this).get(PlaySudokuViewModel::class.java)
+        viewModel = PlaySudokuViewModel(this) //ViewModelProvider(this)//[PlaySudokuViewModel::class.java]
         viewModel.sudokuGame.selectedCellLiveData.observe(this) { updateSelectedCellUI(it) }
         viewModel.sudokuGame.cellsLiveData.observe(this) { updateCells(it) }
         viewModel.sudokuGame.isTakingNotesLiveData.observe(this) {updateNoteTakingUI(it)}

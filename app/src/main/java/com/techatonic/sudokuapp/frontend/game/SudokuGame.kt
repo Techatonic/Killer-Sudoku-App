@@ -1,12 +1,17 @@
 package com.techatonic.sudokuapp.frontend.game
 
+import android.content.Context
+import android.transition.Visibility
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.techatonic.sudokuapp.backend.RetrieveSudoku
 import com.techatonic.sudokuapp.backend.Settings
 import com.techatonic.sudokuapp.backend.sudokutypes.ClassicSudokuType
 import com.techatonic.sudokuapp.backend.sudokutypes.KillerSudokuType
+import com.techatonic.sudokuapp.frontend.custom.PlaySudokuActivity
+import kotlinx.android.synthetic.main.activity_play_sudoku.*
 
-class SudokuGame {
+class SudokuGame(val playSudokuActivity: PlaySudokuActivity) {
 
     var selectedCellLiveData = MutableLiveData<Pair<Int, Int>>()
     var cellsLiveData = MutableLiveData<List<Cell>>()
@@ -32,6 +37,8 @@ class SudokuGame {
     }
 
     fun classicSudokuGenerated(generatedSudoku: ClassicSudokuType) {
+        playSudokuActivity.progressBar.visibility = View.INVISIBLE
+
         val sudoku:ClassicSudokuType = generatedSudoku
 
         val cells = mutableListOf<Cell>()
@@ -56,6 +63,9 @@ class SudokuGame {
 
 
     fun killerSudokuGenerated(generatedSudoku: KillerSudokuType){
+        playSudokuActivity.progressBar.visibility = View.INVISIBLE
+        playSudokuActivity.sudokuBoardView.visibility = View.VISIBLE
+
         val sudoku:KillerSudokuType = generatedSudoku
 
         val cells = mutableListOf<Cell>()
