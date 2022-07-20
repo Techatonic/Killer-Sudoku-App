@@ -120,7 +120,8 @@
             android:layout_row="3"
             android:layout_column="0"
             android:src="@drawable/edit_pen_black"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:contentDescription="Enable/Disable Notes Button"/>
 
         <ImageButton
             android:id="@+id/deleteButton"
@@ -129,7 +130,8 @@
             android:layout_row="3"
             android:layout_column="2"
             android:src="@drawable/erase_black"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:contentDescription="Clear Cell Button"/>
     </GridLayout>
 
 </RelativeLayout>

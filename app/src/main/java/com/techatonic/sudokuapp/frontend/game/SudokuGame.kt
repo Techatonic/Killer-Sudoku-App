@@ -145,6 +145,9 @@ class SudokuGame(val playSudokuActivity: PlaySudokuActivity) {
         if (!this::board.isInitialized){
             return
         }
+        if(selectedRow == -1 || selectedCol == -1){
+            return
+        }
 
         val cell = board.getCell(selectedRow, selectedCol)
         if(isTakingNotes){
