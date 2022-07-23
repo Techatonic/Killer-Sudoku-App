@@ -1,4 +1,4 @@
-package com.techatonic.sudokuapp.backend.sudokutypes
+package com.techatonic.sudokuapp.backend.sudoku.sudokutypes
 
 import kotlin.Pair
 

@@ -10,7 +10,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import com.techatonic.sudokuapp.R
-import com.techatonic.sudokuapp.backend.sudokutypes.ClassicSudokuType
+import com.techatonic.sudokuapp.backend.sudoku.sudokutypes.ClassicSudokuType
 import com.techatonic.sudokuapp.frontend.game.Cell
 import com.techatonic.sudokuapp.frontend.viewmodel.PlaySudokuViewModel
 import kotlinx.android.synthetic.main.activity_play_sudoku.*

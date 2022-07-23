@@ -1,6 +1,4 @@
-package com.techatonic.sudokuapp.backend.sudokutypes
-
-import com.techatonic.sudokuapp.backend.sudokutypes.ClassicSudokuType
+package com.techatonic.sudokuapp.backend.sudoku.sudokutypes
 
 open class ClassicSudokuType {
     enum class SudokuType {

@@ -1,27 +1,29 @@
-package com.techatonic.sudokuapp.backend
+package com.techatonic.sudokuapp.backend.sudoku
 
-import com.techatonic.sudokuapp.backend.sudokutypes.KillerSudokuType
+import com.techatonic.sudokuapp.backend.sudoku.sudokutypes.KillerSudokuType
 import kotlin.Throws
 import com.google.firebase.firestore.FirebaseFirestore
 import android.content.ContentValues
 import android.util.Log
-import androidx.core.util.Pair
 import com.google.android.gms.tasks.OnCompleteListener
-import com.techatonic.sudokuapp.backend.sudokutypes.ClassicSudokuType
+import com.techatonic.sudokuapp.backend.sudoku.sudokutypes.ClassicSudokuType
 import com.google.firebase.firestore.CollectionReference
+import com.techatonic.sudokuapp.backend.sudoku.GetKillerSudokuFromDatabase.SudokuType.Killer
 import com.techatonic.sudokuapp.frontend.game.SudokuGame
 import java.util.*
+import kotlin.Pair
+import kotlin.collections.HashMap
 
-class GetClassicSudokuFromDatabase {
+class GetKillerSudokuFromDatabase {
     enum class SudokuType {
         Classic, Arrow, Thermo, Killer
     }
 
     private var collectionNameBySudokuType: Map<SudokuType, String> = mapOf(
-        kotlin.Pair(SudokuType.Classic, "classicsudokus"),
-        kotlin.Pair(SudokuType.Arrow, "arrowsudokus"),
-        kotlin.Pair(SudokuType.Thermo, "thermosudokus"),
-        kotlin.Pair(SudokuType.Killer, "killersudokus")
+        Pair(SudokuType.Classic, "classicsudokus"),
+        Pair(SudokuType.Arrow, "arrowsudokus"),
+        Pair(SudokuType.Thermo, "thermosudokus"),
+        Pair(Killer, "killersudokus")
     )
     private var documentCount = 0
     private var sudoku: KillerSudokuType
@@ -32,7 +34,7 @@ class GetClassicSudokuFromDatabase {
     }
 
     @Throws(InterruptedException::class)
-    fun retrieveClassicSudoku(sudokuGame: SudokuGame) {
+    fun retrieveKillerSudoku(sudokuGame: SudokuGame) {
         println("\n\nStart Function\n\n")
         val db = FirebaseFirestore.getInstance()
 
@@ -40,7 +42,7 @@ class GetClassicSudokuFromDatabase {
         println("Created countdown latch")
         // Get current id
         val documentReference =
-            db.collection(collectionNameBySudokuType[SudokuType.Classic]!!).document("data")
+            db.collection(collectionNameBySudokuType[Killer]!!).document("data")
         println("Created document reference")
         documentReference.get().addOnSuccessListener { document ->
             println("COMPLETED DOCUMENT GET")
@@ -73,8 +75,8 @@ class GetClassicSudokuFromDatabase {
         val choice = random.nextInt(documentCount)+1
         println("Document choice: $choice")
         val sudokuDocumentReference = db.collection(
-            collectionNameBySudokuType[SudokuType.Classic]!!
-        ).document("classicsudoku-$choice")
+            collectionNameBySudokuType[Killer]!!
+        ).document("killersudoku-$choice")
         sudokuDocumentReference.get().addOnCompleteListener(OnCompleteListener { task ->
             if (task.isSuccessful) {
                 val document = task.result
@@ -118,8 +120,7 @@ class GetClassicSudokuFromDatabase {
                     sudoku = KillerSudokuType(ClassicSudokuType.SudokuType.Killer, grid, filledGrid)
                     if (finishedSections == 1) {
                         finishedSections++
-
-                        returnSudokuToFrontEnd(sudokuGame)
+                        getCages(db, choice, sudokuGame)
                     }
                 } else {
                     Log.d(ContentValues.TAG, "No such document")
@@ -131,9 +132,66 @@ class GetClassicSudokuFromDatabase {
         println("Ending function 2")
     }
 
+    private fun getCages(db: FirebaseFirestore, choice: Int, sudokuGame: SudokuGame) {
+        // Get Cages
+        val cagesCollectionReference =
+            db.collection(collectionNameBySudokuType[Killer]!!).document(
+                "killersudoku-$choice"
+            ).collection("cages")
+        val cageCountVal = intArrayOf(0)
+        val cageCountDocument = cagesCollectionReference.document("cageCount")
+        cageCountDocument.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val document = task.result
+                cageCountVal[0] = (Objects.requireNonNull(document["cageCount"]) as Long).toInt()
+            } else {
+                println("Sudoku retrieval failed #5")
+            }
+            if (finishedSections == 2) {
+                finishedSections++
+                getIndividualCage(0, cagesCollectionReference, cageCountVal[0], sudokuGame)
+            }
+        }
+    }
+
+    private fun getIndividualCage(
+        cageNum: Int,
+        cagesCollectionReference: CollectionReference,
+        cageCount: Int,
+        sudokuGame: SudokuGame
+    ) {
+        if (cageNum >= cageCount) {
+            returnSudokuToFrontEnd(sudokuGame)
+            return
+        }
+        val cageDocument = cagesCollectionReference.document("cage-$cageNum")
+        cageDocument.get().addOnCompleteListener(OnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val cageSum: Int
+                val cells: MutableList<Pair<Int, Int>> = mutableListOf()
+                val document = task.result
+                if (document == null) {
+                    println("Failure")
+                    return@OnCompleteListener
+                }
+                cageSum = (Objects.requireNonNull(document["sum"]) as Long).toInt()
+                val cellsResult = document["cells"] as List<HashMap<String, Int>>
+                cellsResult.forEach { cell ->
+                    cells.add(Pair(cell["first"]!!, cell["second"]!!))
+                }
+                sudoku.addCage(Pair(cageSum, cells))
+                if (finishedSections == 3 + cageNum) {
+                    finishedSections++
+                    getIndividualCage(cageNum + 1, cagesCollectionReference, cageCount, sudokuGame)
+                }
+            } else {
+                println("Sudoku retrieval failed #7")
+            }
+        })
+    }
 
     private fun returnSudokuToFrontEnd(sudokuGame: SudokuGame) {
         println("\n\n\nReached the end")
-        sudokuGame.classicSudokuGenerated(sudoku)
+        sudokuGame.killerSudokuGenerated(sudoku)
     }
 }

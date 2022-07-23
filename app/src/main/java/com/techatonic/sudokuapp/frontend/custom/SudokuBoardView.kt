@@ -6,9 +6,8 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.view.ContentInfoCompat
 import com.techatonic.sudokuapp.R
-import com.techatonic.sudokuapp.backend.sudokutypes.ClassicSudokuType
+import com.techatonic.sudokuapp.backend.sudoku.sudokutypes.ClassicSudokuType
 import com.techatonic.sudokuapp.frontend.game.Cell
 import kotlin.math.min
 
