@@ -8,7 +8,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -31,10 +30,8 @@ class MainMenu : AppCompatActivity() {
 
         userSharedPreferences = getSharedPreferences(getString(R.string.user_data_shared_preferences_key), MODE_PRIVATE)
 
-
-
         val username: String? = userSharedPreferences.getString(getString(R.string.username_key), null)
-        println(username)
+
         if(username.isNullOrBlank()){
             enterUsername()
             playGameButton.setOnClickListener{handleButtonClick()}
@@ -86,14 +83,7 @@ class MainMenu : AppCompatActivity() {
     }
 
     private fun usernameFail(message: String){
-        AlertDialog.Builder(this)
-            .setTitle("Set username failed")
-            .setMessage(message)
-            .setCancelable(true)
-            .setPositiveButton("Ok", DialogInterface.OnClickListener { dialog, _ ->
-                dialog.cancel()
-            })
-            .show()
+        usernameInputField.error = message
     }
 
     private fun usernameSuccess(username: String) {
