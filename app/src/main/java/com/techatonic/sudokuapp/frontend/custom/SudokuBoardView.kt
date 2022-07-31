@@ -49,8 +49,11 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
     }
     private val textPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
-        //color = ContextCompat.getColor(context, R.color.opposite)
         color = ContextCompat.getColor(context, R.color.enteredTextPaint)
+    }
+    private val invalidCellTextPaint = Paint().apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = ContextCompat.getColor(context, R.color.invalidCellTextPaint)
     }
     private val startingCellTextPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
@@ -96,6 +99,7 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
         noteSizePixels = cellSizePixels / sqrtSize.toFloat() / 1.5F
         noteTextPaint.textSize = cellSizePixels / sqrtSize.toFloat() / 1.5F
         textPaint.textSize = cellSizePixels / 1.5F
+        invalidCellTextPaint.textSize = cellSizePixels / 1.5F
         startingCellTextPaint.textSize = cellSizePixels / 1.5F
         cageTextPaint.textSize = cellSizePixels / sqrtSize.toFloat() / 1.25F
 
@@ -167,7 +171,7 @@ class SudokuBoardView (context: Context, attributeSet: AttributeSet) : View(cont
                 val col = cell.col
                 val valueString = value.toString()
 
-                val paintToUse = if (cell.isStartingCell) startingCellTextPaint else textPaint
+                val paintToUse = if (cell.isStartingCell) startingCellTextPaint else if(!cell.isValid) invalidCellTextPaint else textPaint
 
                 paintToUse.getTextBounds(valueString, 0, valueString.length, textBounds)
                 val textWidth = paintToUse.measureText(valueString)

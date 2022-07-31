@@ -70,12 +70,6 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         notesButton.background.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
     }
     private fun updateHighlightedKeys(set: Set<Int>?) = set?.let {
-        // I disagreed with the tutorial on doing this
-
-        //numberButtons.forEachIndexed { index, button ->
-            //val color = if(set.contains(index+1)) ContextCompat.getColor(this, R.color.colorPrimary) else Color.LTGRAY
-        //    button.setBackgroundColor(R.color.colorPrimary)
-        //}
     }
 
     private fun updateCells(cells: List<Cell>?) = cells?.let {
@@ -99,10 +93,8 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        println("Button pressed")
         when (item.itemId) {
             android.R.id.home -> {
-                println("Howdy partner")
                 finish()
                 return true
             }

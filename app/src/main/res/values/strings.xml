@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SudokuApp</string>
+    <string name="app_name">Killer Sudoku</string>
     <string name="user_data_shared_preferences_key">userdata</string>
     <string name="username_key">username</string>
 </resources>

@@ -16,5 +16,6 @@
     <color name="opposite">#ff000000</color>
     <color name="conflictingPaint">#BDBDBD</color>
     <color name="enteredTextPaint">#003350</color>
+    <color name="invalidCellTextPaint">#FF0000</color>
 
 </resources>

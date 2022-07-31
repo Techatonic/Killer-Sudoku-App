@@ -9,7 +9,7 @@ import com.techatonic.sudokuapp.backend.sudoku.sudokutypes.KillerSudokuType
 import com.techatonic.sudokuapp.frontend.custom.PlaySudokuActivity
 import kotlinx.android.synthetic.main.activity_play_sudoku.*
 
-class SudokuGame(val playSudokuActivity: PlaySudokuActivity) {
+class SudokuGame(private val playSudokuActivity: PlaySudokuActivity) {
 
     var selectedCellLiveData = MutableLiveData<Pair<Int, Int>>()
     var cellsLiveData = MutableLiveData<List<Cell>>()
@@ -78,7 +78,7 @@ class SudokuGame(val playSudokuActivity: PlaySudokuActivity) {
             }
         }
 
-        board = Board(9, cells)
+        board = Board(9, cells, sudoku.cages)
 
         selectedCellLiveData.postValue(Pair(selectedRow, selectedCol))
         cellsLiveData.postValue(board.cells)
@@ -106,6 +106,12 @@ class SudokuGame(val playSudokuActivity: PlaySudokuActivity) {
             highlightedKeysLiveData.postValue(cell.notes)
         } else {
             cell.value = number
+            cell.isValid = true
+            //TODO Check validity
+            val validBoard: Boolean = CheckValidBoard.isValidKillerGrid(board)
+            if(!validBoard){
+                cell.isValid = false
+            }
         }
         cellsLiveData.postValue(board.cells)
     }
@@ -153,6 +159,7 @@ class SudokuGame(val playSudokuActivity: PlaySudokuActivity) {
             highlightedKeysLiveData.postValue(setOf())
         } else{
             cell.value = 0
+            cell.isValid = true
         }
         cellsLiveData.postValue(board.cells)
     }
