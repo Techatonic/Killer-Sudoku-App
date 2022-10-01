@@ -2,12 +2,12 @@ package com.techatonic.sudokuapp.frontend.custom
 
 import android.graphics.Color
 import android.graphics.PorterDuff
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.techatonic.sudokuapp.R
 import com.techatonic.sudokuapp.backend.sudoku.sudokutypes.ClassicSudokuType
@@ -36,7 +36,7 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         sudokuBoardView.registerListener(this)
 
         viewModel =
-            PlaySudokuViewModel(this) //ViewModelProvider(this)//[PlaySudokuViewModel::class.java]
+            PlaySudokuViewModel(this)
         viewModel.sudokuGame.selectedCellLiveData.observe(this) { updateSelectedCellUI(it) }
         viewModel.sudokuGame.cellsLiveData.observe(this) { updateCells(it) }
         viewModel.sudokuGame.isTakingNotesLiveData.observe(this) { updateNoteTakingUI(it) }
@@ -102,5 +102,4 @@ class PlaySudokuActivity : AppCompatActivity(), SudokuBoardView.OnTouchListener 
         }
         return super.onContextItemSelected(item)
     }
-
 }

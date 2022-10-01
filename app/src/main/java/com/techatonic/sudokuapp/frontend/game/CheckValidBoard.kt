@@ -49,8 +49,8 @@ object CheckValidBoard {
         return true
     }
 
-    fun isValidKillerGrid(board: Board): Boolean{
-        if(!isValidClassicGrid(board)) {
+    fun isValidKillerGrid(board: Board): Boolean {
+        if (!isValidClassicGrid(board)) {
             return false
         }
         val grid = board.getGrid()

@@ -30,10 +30,10 @@ class MainMenu : AppCompatActivity() {
 
         val username: String? = userSharedPreferences.getString(getString(R.string.username_key), null)
 
-        if(username.isNullOrBlank()){
+        if (username.isNullOrBlank()) {
             enterUsername()
-            playGameButton.setOnClickListener{handleButtonClick()}
-        } else{
+            playGameButton.setOnClickListener { handleButtonClick() }
+        } else {
             User.username = username
             playGameButton.setOnClickListener {
                 startActivity(Intent(this, PlaySudokuActivity::class.java))
@@ -41,15 +41,15 @@ class MainMenu : AppCompatActivity() {
         }
     }
 
-    private fun enterUsername(){
+    private fun enterUsername() {
         usernameInputField = findViewById(R.id.usernameInputField)
         usernameInputField.isEnabled = true
         usernameInputField.visibility = View.VISIBLE
     }
 
-    private fun handleButtonClick(){
+    private fun handleButtonClick() {
         val enteredUsername: String = usernameInputField.text.toString()
-        if(enteredUsername == ""){
+        if (enteredUsername == "") {
             return usernameFail("Username field cannot be empty")
         }
 
@@ -62,11 +62,11 @@ class MainMenu : AppCompatActivity() {
                 val data = document.data
                 Log.d(ContentValues.TAG, "DocumentSnapshot data: $data")
                 val usernames: ArrayList<String>
-                if(data != null && data["usernames"] != null){
+                if (data != null && data["usernames"] != null) {
                     usernames = data["usernames"] as ArrayList<String>
-                    if(!usernames.contains(enteredUsername)){
+                    if (!usernames.contains(enteredUsername)) {
                         usernameSuccess(enteredUsername)
-                    } else{
+                    } else {
                         usernameFail("Username has been taken. Please try again")
                     }
                 } else {
@@ -80,13 +80,13 @@ class MainMenu : AppCompatActivity() {
             .addOnCanceledListener { println("FAILURE - UNABLE TO RETRIEVE DOCUMENT #1") }
     }
 
-    private fun usernameFail(message: String){
+    private fun usernameFail(message: String) {
         usernameInputField.error = message
     }
 
     private fun usernameSuccess(username: String) {
         Toast.makeText(this, "Username created successfully", Toast.LENGTH_LONG).show()
-        with(userSharedPreferences.edit()){
+        with(userSharedPreferences.edit()) {
             putString(getString(R.string.username_key), username)
             apply()
         }
@@ -98,13 +98,11 @@ class MainMenu : AppCompatActivity() {
         startActivity(Intent(this, PlaySudokuActivity::class.java))
     }
 
-    private fun addUsernameToDatabase(username: String){
+    private fun addUsernameToDatabase(username: String) {
         val db = FirebaseFirestore.getInstance()
         val documentReference =
             db.collection("userdata").document("usernames")
 
         documentReference.update("usernames", FieldValue.arrayUnion(username))
     }
-
-
 }
